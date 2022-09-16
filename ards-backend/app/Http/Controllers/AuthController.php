@@ -72,4 +72,42 @@ class AuthController extends Controller
         return $arr;
     }
 
+    public function login(Request $request){
+        $arr = ['error' => ''];
+
+        $validator = Validator::make($request->all(), [
+            'cpf' => 'required|digits:11',
+            'password' => 'required'
+        ]);
+
+        if(!$validator->fails()){
+            $cpf = $request->input('cpf');
+            $password = $request->input('password');
+
+            $token = auth()->attempt([
+                'cpf' => $cpf,
+                'password' => $password
+            ]);
+
+            if(!$token){
+                $arr['error'] = 'CPF e/ou Senha estão errados.';
+                return $arr;
+            }
+
+            $arr['token'] = $token;
+            $user = auth()->user();
+            $arr['user'] = $user;
+
+            $properties = Unit::select(['id', 'name'])
+            ->where('id_owner', $user['id'])
+            ->get();
+
+            $arr['user']['properties'] = $properties;
+        }else{
+            $arr['error'] = $validator->errors()->first();
+            return $arr;
+        }
+
+        return $arr;
+    }
 }
