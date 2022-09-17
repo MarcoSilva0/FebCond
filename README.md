@@ -19,3 +19,6 @@ Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Nati
 
 ### Pacotes
 - JWT AUTH Laravel https://jwt-auth.readthedocs.io/en/develop/laravel-installation/  e add JWT_TTL=null pois usaremos um APP, dentro de jwt.php remova o exp de 'required_claims'
+
+### Utilidade
+- Para salvar os arquivos foi criado um storage no backend com a ferramenta storage do Laravel para criar foi utilizado o comando "php artisan storage:link"
