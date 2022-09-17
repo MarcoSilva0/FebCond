@@ -110,4 +110,27 @@ class AuthController extends Controller
 
         return $arr;
     }
+
+    public function validateToken(Request $request){
+        $arr = ['error' => ''];
+
+        $user = auth()->user();
+        $arr['user'] = $user;
+
+        $properties = Unit::select(['id', 'name'])
+        ->where('id_owner', $user['id'])
+        ->get();
+        
+        $arr['user']['properties'] = $properties;
+
+        return $arr;
+    }
+
+    public function logout(Request $request){
+        $arr = ['error' => ''];
+
+        $user = auth()->logout();
+
+        return $arr;
+    }
 }
