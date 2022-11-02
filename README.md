@@ -1,10 +1,6 @@
 # Sistema de Gestão de Condomínio
 
 Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Native
-
-
-
-
 ## Funcionalidades
 
 - Cadastro de Usuários
@@ -22,3 +18,9 @@ Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Nati
 
 ### Utilidade
 - Para salvar os arquivos foi criado um storage no backend com a ferramenta storage do Laravel para criar foi utilizado o comando "php artisan storage:link"
+
+## Back-end
+- Para iniciar o servidor basta roda 'php artisan serve'
+## Front-end
+- Para iniciar o servidor basta roda 'npm start'
+- Para o dashboard foi utilziado a biblioteca CoreUI Admin no ReacJs, template adquirido no repositório: https://github.com/coreui/coreui-free-react-admin-template
