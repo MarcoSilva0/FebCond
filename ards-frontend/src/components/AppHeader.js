@@ -1,5 +1,4 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
@@ -8,8 +7,6 @@ import {
   CHeaderDivider,
   CHeaderNav,
   CHeaderToggler,
-  CNavLink,
-  CNavItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilMenu } from '@coreui/icons'
