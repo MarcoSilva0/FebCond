@@ -18,6 +18,8 @@ Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Nati
 
 ### Utilidade
 - Para salvar os arquivos foi criado um storage no backend com a ferramenta storage do Laravel para criar foi utilizado o comando "php artisan storage:link"
+- Ao instalar o Back-end rode no terminarl o seguinte comando dentro da pasta 'php composer install' 
+- Ao instalar o Front-end rode no terminarl o seguinte comando dentro da pasta 'npm install' 
 
 ## Back-end
 - Para iniciar o servidor basta roda 'php artisan serve'
