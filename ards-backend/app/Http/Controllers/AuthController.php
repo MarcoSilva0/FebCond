@@ -27,7 +27,7 @@ class AuthController extends Controller
         ]);
 
         if(!$validator->fails()){
-            
+
             $name = $request->input('name');
             $email = $request->input('email');
             $cpf = $request->input('cpf');
@@ -76,21 +76,21 @@ class AuthController extends Controller
         $arr = ['error' => ''];
 
         $validator = Validator::make($request->all(), [
-            'cpf' => 'required|digits:11',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
         if(!$validator->fails()){
-            $cpf = $request->input('cpf');
+            $email = $request->input('email');
             $password = $request->input('password');
 
             $token = auth()->attempt([
-                'cpf' => $cpf,
+                'email' => $email,
                 'password' => $password
             ]);
 
             if(!$token){
-                $arr['error'] = 'CPF e/ou Senha estão errados.';
+                $arr['error'] = 'E-mail e/ou Senha estão errados.';
                 return $arr;
             }
 
@@ -120,7 +120,7 @@ class AuthController extends Controller
         $properties = Unit::select(['id', 'name'])
         ->where('id_owner', $user['id'])
         ->get();
-        
+
         $arr['user']['properties'] = $properties;
 
         return $arr;

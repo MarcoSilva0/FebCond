@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
 
 const loading = (
@@ -12,18 +12,18 @@ const loading = (
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
-const Login = React.lazy(() => import('./views/pages/login/Login'))
+const Login = React.lazy(() => import('./views/Login'))
 
 const App = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Suspense fallback={loading}>
         <Routes>
           <Route exact path="/login" name="Login Page" element={<Login />} />
           <Route path="*" name="Home" element={<DefaultLayout />} />
         </Routes>
       </Suspense>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 

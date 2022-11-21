@@ -1,0 +1,203 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react'
+import {
+  CButtonGroup,
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CModal,
+  CModalHeader,
+  CModalBody,
+  CModalFooter,
+  CForm,
+  CFormInput,
+  CFormTextarea,
+} from '@coreui/react'
+import DataTable from 'react-data-table-component'
+import CIcon from '@coreui/icons-react'
+import useApi from '../Services/api'
+import { cilCheck } from '@coreui/icons'
+
+// eslint-disable-next-line import/no-anonymous-default-export, react/display-name
+export default () => {
+  const api = useApi()
+
+  const [loading, setLoading] = useState(true)
+  const [list, setList] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [modalLoading, setModalLoading] = useState(false)
+  const [modalTitleField, setModalTitleField] = useState('')
+  const [modalBodyField, setModalBodyField] = useState('')
+  const [modalId, setModalId] = useState('')
+
+  const handelCloseModal = () => {
+    setShowModal(false)
+  }
+
+  const handleEditButton = (index) => {
+    setModalId(index.id)
+    setModalTitleField(index.title)
+    setModalBodyField(index.body)
+    setShowModal(true)
+  }
+
+  const handleNewButton = () => {
+    setModalId()
+    setModalTitleField()
+    setModalBodyField()
+    setShowModal(true)
+  }
+
+  const handleRemoveButton = async (index) => {
+    if (window.confirm('Tem certeza que deseja excluir?')) {
+      const result = await api.removeReservations(index.id)
+      if (result.error === '') {
+        getList()
+      } else {
+        alert(result.error)
+      }
+    }
+  }
+
+  const handelSaveModal = async () => {
+    if (modalTitleField && modalBodyField) {
+      setModalLoading(true)
+      let result
+      let data = {
+        title: modalTitleField,
+        body: modalBodyField,
+      }
+      if (!modalId) {
+        result = await api.addReservations(data)
+      } else {
+        result = await api.updateReservations(modalId, data)
+      }
+      setModalLoading(false)
+      if (result.error === '') {
+        setShowModal(false)
+        getList()
+      } else {
+        alert(result.error)
+      }
+    } else {
+      alert('Preencha os campos!')
+    }
+  }
+
+  const columns = [
+    {
+      name: 'Unidade',
+      selector: (row) => row.name_unit,
+    },
+    {
+      name: 'Área',
+      selector: (row) => row.name_area,
+    },
+    {
+      name: 'Data da reserva',
+      selector: (row) => row.reservation_date,
+    },
+    {
+      cell: (row) => (
+        // eslint-disable-next-line react/jsx-no-undef
+        <CButtonGroup>
+          <CButton color="info" className="text-white" onClick={() => handleEditButton(row)}>
+            Editar
+          </CButton>
+          <CButton color="danger" className="text-white" onClick={() => handleRemoveButton(row)}>
+            Excluir
+          </CButton>
+        </CButtonGroup>
+      ),
+      selector: (row) => row.action,
+      name: 'Ação',
+      right: true,
+    },
+  ]
+
+  useEffect(() => {
+    getList()
+  }, [])
+
+  const getList = async () => {
+    setLoading(true)
+    const result = await api.getReservations()
+    console.log(result)
+    if (result.error === '') {
+      setList(result.list)
+      setLoading(false)
+    } else {
+      alert(result.error)
+    }
+  }
+
+  return (
+    <>
+      <CRow>
+        <CCol>
+          <h2>Reservas</h2>
+          <CCard>
+            <CCardHeader>
+              <CButton color="primary" onClick={handleNewButton}>
+                <CIcon icon={cilCheck} />
+                Novo Aviso
+              </CButton>
+            </CCardHeader>
+            <CCardBody>
+              <DataTable columns={columns} data={list} progressPending={loading} pagination />
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+
+      <CModal visible={showModal} onClose={handelCloseModal}>
+        <CModalHeader closeButton>{!modalId ? 'Novo' : 'Editar'} Aviso</CModalHeader>
+        <CModalBody>
+          <CFormInput type="hidden" id="modal-id" value={modalId} />
+          <CForm>
+            <CFormInput
+              type="text"
+              id="modal-title"
+              placeholder="Digite um título"
+              label="Título do Aviso"
+              value={modalTitleField}
+              onChange={(e) => setModalTitleField(e.target.value)}
+              disabled={modalLoading}
+            />
+            <br></br>
+            <CFormTextarea
+              id="modal-body"
+              placeholder="Digite o conteúdo do aviso"
+              label="Conteúdo do Aviso"
+              value={modalBodyField}
+              rows="5"
+              onChange={(e) => setModalBodyField(e.target.value)}
+              disabled={modalLoading}
+            ></CFormTextarea>
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            color="success"
+            className="text-white"
+            onClick={handelSaveModal}
+            disabled={modalLoading}
+          >
+            {modalLoading ? 'Carregando...' : 'Salvar'}
+          </CButton>
+          <CButton
+            color="danger"
+            className="text-white"
+            onClick={handelCloseModal}
+            disabled={modalLoading}
+          >
+            Cancelar
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    </>
+  )
+}

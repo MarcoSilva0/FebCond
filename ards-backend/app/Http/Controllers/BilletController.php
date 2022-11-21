@@ -24,11 +24,11 @@ class BilletController extends Controller
 
             if($unit > 0){
                 $billets = Billet::where('id_unit', $property)->get();
-    
+
                 foreach($billets as $billetKey => $billetValue){
                     $billets[$billetKey]['fileurl'] = asset('storage/'.$billetValue['fileurl']);
                 }
-    
+
                 $arr['list'] = $billets;
             }else{
                 $arr['error'] = 'Unidade não pertece ao usuário atual';
@@ -38,11 +38,6 @@ class BilletController extends Controller
         }else{
             $arr['error'] = 'É necessário informar a unidade';
         }
-
-        
-
-        
-
         return $arr;
     }
 }

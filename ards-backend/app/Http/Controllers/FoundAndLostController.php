@@ -41,7 +41,7 @@ class FoundAndLostController extends Controller
 
     public function insert(Request $request){
         $arr = ['error' => ''];
-        
+
         $validator = Validator::make($request->all(), [
             'description' => 'required',
             'where' => 'required',
@@ -61,14 +61,14 @@ class FoundAndLostController extends Controller
             $newLost->photo = $photo;
             $newLost->description = $description;
             $newLost->where = $where;
-            $newLost->datecreated = date('Y-m-d');
+            $newLost->datecreated = date('Y-m-d H:i:s');
             $newLost->save();
 
         }else{
             $arr['error'] = $validator->errors()->first();
             return $arr;
         }
-        
+
         return $arr;
     }
 

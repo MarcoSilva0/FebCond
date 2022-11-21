@@ -28,10 +28,16 @@ Route::middleware('auth:api')->group(function(){
 
     // Mural de avisos
     Route::get('/walls', [WallController::class, 'getAll']);
+    Route::post('/walls', [WallController::class, 'addWall']);
+    Route::put('/wall/{id}', [WallController::class, 'updateWall']);
+    Route::delete('/wall/{id}', [WallController::class, 'deleteWall']);
     Route::post('/wall/{id}/like', [WallController::class, 'like']);
 
     // Documentos
     Route::get('/docs', [DocController::class, 'getAll']);
+    Route::post('/docs', [DocController::class, 'addDocs']);
+    Route::post('/doc/{id}', [DocController::class, 'updateDocs']);
+    Route::delete('/doc/{id}', [DocController::class, 'deleteDoc']);
 
     // Livro de ocorrência
     Route::get('/warnings', [WarningController::class, 'getMyWarnings']);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Wall;
 use App\Models\WallLike;
+use Illuminate\Support\Facades\Validator;
 
 class WallController extends Controller
 {
@@ -34,6 +35,75 @@ class WallController extends Controller
         }
 
         $arr['list'] = $walls;
+
+        return $arr;
+    }
+
+    public function updateWall($id, Request $request){
+        $arr = ['error' => ''];
+
+        $title = $request->input('title');
+        $body = $request->input('body');
+        if($title != '' && $body != '' ){
+
+            $item = Wall::find($id);
+            if($item){
+                $item->title = $title;
+                $item->body = $body;
+                $item->save();
+            }else{
+                $arr['error'] = 'Aviso inexistente';
+                return $arr;
+            }
+
+        }else{
+            $arr['error'] = 'Aviso inexistente';
+            return $arr;
+        }
+
+        return $arr;
+    }
+
+    public function addWall(Request $request){
+        $arr = ['error' => ''];
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'body' => 'required',
+        ]);
+
+        if(!$validator->fails()){
+
+            $title = $request->input('title');
+            $body = $request->input('body');
+
+            $newWall = new Wall();
+            $newWall->title = $title;
+            $newWall->body = $body;
+            $newWall->datecreated = date('Y-m-d');
+            $newWall->save();
+        }else{
+            $arr['error'] = $validator->errors()->first();
+            return $arr;
+        }
+
+        return $arr;
+    }
+
+    public function deleteWall($id){
+        $arr = ['error'=>''];
+
+        $user = auth()->user();
+        $aviso = Wall::find($id);
+
+        if($aviso){
+
+            Wall::find($id)->delete();
+
+        }else{
+            $arr['error'] = 'Aviso inexistente';
+            return $arr;
+        }
 
         return $arr;
     }
