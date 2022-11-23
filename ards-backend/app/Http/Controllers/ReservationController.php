@@ -76,6 +76,30 @@ class ReservationController extends Controller
         return $arr;
     }
 
+    public function getListReservation(){
+
+        $arr = ['error' => '', 'list' => []];
+
+        $reservas = Reservation::all();
+
+        foreach($reservas as $reserva){
+            $area = Area::find($reserva['id_area']);
+            $unidade = Unit::find($reserva['id_unit']);
+            $dataRes = date('d/m/Y H:i', strtotime($reserva['reservation_date']));
+            $horaDepois = date('H:i', strtotime('+1 hour', strtotime($reserva['reservation_date'])));
+            $dataRes .= ' à '. $horaDepois;
+
+            $arr['list'][] = [
+                'id' => $reserva['id'],
+                'name_unit' => $unidade['name'],
+                'name_area' => $area['title'],
+                'reservation_date' => $dataRes
+            ];
+        }
+
+        return $arr;
+    }
+
     public function setReservation($id, Request $request){
         $arr = ['error'=>''];
 

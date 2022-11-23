@@ -118,10 +118,9 @@ export default () => {
     },
 
     //Reservas
-    //Avisos
     getReservations: async () => {
       let token = localStorage.getItem('token')
-      let json = await request('get', '/reservations', {}, token)
+      let json = await request('get', '/allreservations', {}, token)
       return json
     },
     updateReservations: async (id, data) => {
