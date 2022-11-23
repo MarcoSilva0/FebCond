@@ -18,7 +18,7 @@ import {
 import DataTable from 'react-data-table-component'
 import CIcon from '@coreui/icons-react'
 import useApi from '../Services/api'
-import { cilCheck, cilCloudDownload } from '@coreui/icons'
+import { cilCheck, cilCloudDownload, cilPenAlt, cilPlus, cilTrash } from '@coreui/icons'
 
 // eslint-disable-next-line import/no-anonymous-default-export, react/display-name
 export default () => {
@@ -107,22 +107,32 @@ export default () => {
     {
       cell: (row) => (
         // eslint-disable-next-line react/jsx-no-undef
-        <CButtonGroup>
-          <CButton color="success" className="text-white" onClick={() => handleDownloadButton(row)}>
-            <CIcon icon={cilCloudDownload} />
-            Download
-          </CButton>
-          <CButton color="info" className="text-white" onClick={() => handleEditButton(row)}>
-            Editar
-          </CButton>
-          <CButton color="danger" className="text-white" onClick={() => handleRemoveButton(row)}>
-            Excluir
-          </CButton>
-        </CButtonGroup>
+        <CRow className="justify-content-around w-100">
+          <CCol className="text-center">
+            <CButton
+              color="success"
+              className="text-white"
+              onClick={() => handleDownloadButton(row)}
+            >
+              <CIcon icon={cilCloudDownload} />
+              Download
+            </CButton>
+          </CCol>
+          <CCol className="text-center">
+            <CButton color="info" className="text-white" onClick={() => handleEditButton(row)}>
+              <CIcon icon={cilPenAlt} /> Editar
+            </CButton>
+          </CCol>
+          <CCol className="text-center">
+            <CButton color="danger" className="text-white" onClick={() => handleRemoveButton(row)}>
+              <CIcon icon={cilTrash} /> Excluir
+            </CButton>
+          </CCol>
+        </CRow>
       ),
       selector: (row) => row.action,
       name: 'Ação',
-      right: true,
+      center: true,
     },
   ]
 
@@ -148,8 +158,8 @@ export default () => {
           <h2>Documentos</h2>
           <CCard>
             <CCardHeader>
-              <CButton color="primary" onClick={handleNewButton}>
-                <CIcon icon={cilCheck} />
+              <CButton color="primary" className="btn-addApi" onClick={handleNewButton}>
+                <CIcon icon={cilPlus} />
                 Novo Documento
               </CButton>
             </CCardHeader>
