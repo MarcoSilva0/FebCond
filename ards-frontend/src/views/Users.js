@@ -13,12 +13,12 @@ import {
   CModalFooter,
   CForm,
   CFormInput,
-  CFormTextarea,
 } from '@coreui/react'
 import DataTable from 'react-data-table-component'
 import CIcon from '@coreui/icons-react'
 import useApi from '../Services/api'
-import { cilPenAlt, cilPlus, cilTrash } from '@coreui/icons'
+import { cilCloudDownload, cilPenAlt, cilPlus, cilTrash } from '@coreui/icons'
+import { IMaskInput } from 'react-imask'
 
 // eslint-disable-next-line import/no-anonymous-default-export, react/display-name
 export default () => {
@@ -28,8 +28,10 @@ export default () => {
   const [list, setList] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [modalLoading, setModalLoading] = useState(false)
-  const [modalTitleField, setModalTitleField] = useState('')
-  const [modalBodyField, setModalBodyField] = useState('')
+  const [modalNameField, setModalNameField] = useState('')
+  const [modalEmailField, setModalEmailField] = useState('')
+  const [modalCpfField, setModalCpfField] = useState('')
+  const [modalFileField, setModalFileField] = useState('')
   const [modalId, setModalId] = useState('')
 
   const handelCloseModal = () => {
@@ -38,21 +40,28 @@ export default () => {
 
   const handleEditButton = (index) => {
     setModalId(index.id)
-    setModalTitleField(index.title)
-    setModalBodyField(index.body)
+    setModalNameField(index.name)
+    setModalEmailField(index.email)
+    setModalCpfField(index.cpf)
+    setModalFileField(index.file)
     setShowModal(true)
   }
 
   const handleNewButton = () => {
     setModalId()
-    setModalTitleField()
-    setModalBodyField()
+    setModalNameField()
+    setModalEmailField()
+    setModalCpfField()
     setShowModal(true)
+  }
+
+  const handleDownloadButton = (index) => {
+    window.open(index.fileurl)
   }
 
   const handleRemoveButton = async (index) => {
     if (window.confirm('Tem certeza que deseja excluir?')) {
-      const result = await api.removeReservations(index.id)
+      const result = await api.removeDocuments(index.id)
       if (result.error === '') {
         getList()
       } else {
@@ -62,17 +71,28 @@ export default () => {
   }
 
   const handelSaveModal = async () => {
-    if (modalTitleField && modalBodyField) {
+    if (modalNameField) {
       setModalLoading(true)
       let result
       let data = {
-        title: modalTitleField,
-        body: modalBodyField,
+        name: modalNameField(),
+        email: modalEmailField(),
+        cpf: modalCpfField(),
       }
       if (!modalId) {
-        result = await api.addReservations(data)
+        if (modalFileField) {
+          data.file = modalFileField
+          result = await api.addDocuments(data)
+        } else {
+          alert('Selecione o arquivo!')
+          setModalLoading(false)
+          return
+        }
       } else {
-        result = await api.updateReservations(modalId, data)
+        if (modalFileField) {
+          data.file = modalFileField
+        }
+        result = await api.updateDocuments(modalId, data)
       }
       setModalLoading(false)
       if (result.error === '') {
@@ -88,27 +108,44 @@ export default () => {
 
   const columns = [
     {
-      name: 'Unidade',
-      selector: (row) => row.name_unit,
+      name: 'Nome',
+      selector: (row) => row.name,
     },
     {
-      name: 'Área',
-      selector: (row) => row.name_area,
+      name: 'E-mail',
+      selector: (row) => row.email,
     },
     {
-      name: 'Data da reserva',
-      selector: (row) => row.reservation_date,
+      name: 'CPF',
+      selector: (row) => row.cpf,
+    },
+    {
+      name: 'Admin',
+      selector: (row) => row.admin,
+      compact: true,
+      minWidth: '20px',
+      maxWidth: '50px',
     },
     {
       cell: (row) => (
         // eslint-disable-next-line react/jsx-no-undef
         <CRow className="justify-content-around w-100">
-          <CCol className="text-center">
+          <CCol className="text-center px-1">
+            <CButton
+              color="success"
+              className="text-white"
+              onClick={() => handleDownloadButton(row)}
+            >
+              <CIcon icon={cilCloudDownload} />
+              Foto
+            </CButton>
+          </CCol>
+          <CCol className="text-center px-1">
             <CButton color="info" className="text-white" onClick={() => handleEditButton(row)}>
               <CIcon icon={cilPenAlt} /> Editar
             </CButton>
           </CCol>
-          <CCol className="text-center">
+          <CCol className="text-center px-1">
             <CButton color="danger" className="text-white" onClick={() => handleRemoveButton(row)}>
               <CIcon icon={cilTrash} /> Excluir
             </CButton>
@@ -118,6 +155,7 @@ export default () => {
       selector: (row) => row.action,
       name: 'Ação',
       center: true,
+      minWidth: '400px',
     },
   ]
 
@@ -127,8 +165,7 @@ export default () => {
 
   const getList = async () => {
     setLoading(true)
-    const result = await api.getReservations()
-    console.log(result)
+    const result = await api.getUsers()
     if (result.error === '') {
       setList(result.list)
       setLoading(false)
@@ -141,12 +178,12 @@ export default () => {
     <>
       <CRow>
         <CCol>
-          <h2>Reservas</h2>
+          <h2>Usuários</h2>
           <CCard>
             <CCardHeader>
               <CButton color="primary" className="btn-addApi" onClick={handleNewButton}>
                 <CIcon icon={cilPlus} />
-                Nova Reserva
+                Novo Usuário
               </CButton>
             </CCardHeader>
             <CCardBody>
@@ -157,29 +194,52 @@ export default () => {
       </CRow>
 
       <CModal visible={showModal} onClose={handelCloseModal}>
-        <CModalHeader closeButton>{!modalId ? 'Novo' : 'Editar'} Aviso</CModalHeader>
+        <CModalHeader closeButton>{!modalId ? 'Novo' : 'Editar'} Usuário</CModalHeader>
         <CModalBody>
-          <CFormInput type="hidden" id="modal-id" value={modalId} />
           <CForm>
+            <CFormInput type="hidden" id="modal-id" value={modalId} />
             <CFormInput
               type="text"
-              id="modal-title"
-              placeholder="Digite um título"
-              label="Título do Aviso"
-              value={modalTitleField}
-              onChange={(e) => setModalTitleField(e.target.value)}
+              id="modal-name"
+              placeholder="Nome do usuário"
+              label="Nome"
+              value={modalNameField}
+              onChange={(e) => setModalNameField(e.target.value)}
               disabled={modalLoading}
             />
             <br></br>
-            <CFormTextarea
-              id="modal-body"
-              placeholder="Digite o conteúdo do aviso"
-              label="Conteúdo do Aviso"
-              value={modalBodyField}
-              rows="5"
-              onChange={(e) => setModalBodyField(e.target.value)}
+            <CFormInput
+              type="email"
+              id="modal-email"
+              placeholder="Nome do usuário"
+              label="Nome"
+              value={modalEmailField}
+              onChange={(e) => setModalEmailField(e.target.value)}
               disabled={modalLoading}
-            ></CFormTextarea>
+            />
+            <br></br>
+            <CFormInput
+              type="text"
+              id="modal-title"
+              as={IMaskInput}
+              mask="000.000.000-00"
+              placeholder="Digite o CPF"
+              label="CPF:"
+              value={modalCpfField}
+              onChange={(e) => setModalCpfField(e.target.value)}
+              disabled={modalLoading}
+            />
+            <br></br>
+            <CFormInput
+              type="file"
+              id="modal-file"
+              label="Arquivo (pdf)"
+              placeholder="Escolha um arquivo"
+              accept="application/pdf"
+              onChange={(e) => setModalFileField(e.target.files[0])}
+              name="file"
+              disabled={modalLoading}
+            />
           </CForm>
         </CModalBody>
         <CModalFooter>

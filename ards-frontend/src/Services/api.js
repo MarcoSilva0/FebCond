@@ -138,5 +138,12 @@ export default () => {
       let json = await request('delete', `/wall/${id}`, {}, token)
       return json
     },
+
+    //Usuários
+    getUsers: async () => {
+      let token = localStorage.getItem('token')
+      let json = await request('get', '/users', {}, token)
+      return json
+    },
   }
 }

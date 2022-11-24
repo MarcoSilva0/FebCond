@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import {
-  CButtonGroup,
   CButton,
   CCard,
   CCardBody,
@@ -18,7 +17,7 @@ import {
 import DataTable from 'react-data-table-component'
 import CIcon from '@coreui/icons-react'
 import useApi from '../Services/api'
-import { cilCheck, cilCloudDownload, cilPenAlt, cilPlus, cilTrash } from '@coreui/icons'
+import { cilCloudDownload, cilPenAlt, cilPlus, cilTrash } from '@coreui/icons'
 
 // eslint-disable-next-line import/no-anonymous-default-export, react/display-name
 export default () => {
