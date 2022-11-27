@@ -18,7 +18,7 @@ import DataTable from 'react-data-table-component'
 import CIcon from '@coreui/icons-react'
 import useApi from '../Services/api'
 import { cilCloudDownload, cilPenAlt, cilPlus, cilTrash } from '@coreui/icons'
-import { IMaskInput } from 'react-imask'
+import { cpfMask } from './functions/maskCpf'
 
 // eslint-disable-next-line import/no-anonymous-default-export, react/display-name
 export default () => {
@@ -106,6 +106,10 @@ export default () => {
     }
   }
 
+  const handlechangeCpf = (e) => {
+    setModalCpfField(cpfMask(e.target.value))
+  }
+
   const columns = [
     {
       name: 'Nome',
@@ -120,11 +124,9 @@ export default () => {
       selector: (row) => row.cpf,
     },
     {
-      name: 'Admin',
-      selector: (row) => row.admin,
+      name: 'Permissão',
+      selector: (row) => row.permission,
       compact: true,
-      minWidth: '20px',
-      maxWidth: '50px',
     },
     {
       cell: (row) => (
@@ -221,21 +223,19 @@ export default () => {
             <CFormInput
               type="text"
               id="modal-title"
-              as={IMaskInput}
-              mask="000.000.000-00"
               placeholder="Digite o CPF"
               label="CPF:"
               value={modalCpfField}
-              onChange={(e) => setModalCpfField(e.target.value)}
+              onChange={handlechangeCpf}
               disabled={modalLoading}
             />
             <br></br>
             <CFormInput
               type="file"
               id="modal-file"
-              label="Arquivo (pdf)"
+              label="Foto do usuário"
               placeholder="Escolha um arquivo"
-              accept="application/pdf"
+              accept="image/png, image/gif, image/jpeg"
               onChange={(e) => setModalFileField(e.target.files[0])}
               name="file"
               disabled={modalLoading}
