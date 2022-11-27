@@ -30,6 +30,7 @@ Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Nati
 - php artisan migrations
 - php artisan storage:link
 - Para iniciar o servidor basta roda 'php artisan serve'
+- Login e senha do usuário padrão = admin@admin.com:123456a
 
 ## Front-end
 - Para iniciar o servidor basta roda 'npm start'
