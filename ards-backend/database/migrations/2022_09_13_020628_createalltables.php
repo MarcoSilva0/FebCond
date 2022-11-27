@@ -28,7 +28,8 @@ class Createalltables extends Migration
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'cpf' => '12345678910',
-                'admin' => 1,
+                'photo' => '',
+                'permission' => 1,
                 'password' => password_hash('123456a', PASSWORD_DEFAULT)
             )
         );
