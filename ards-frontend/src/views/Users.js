@@ -237,7 +237,7 @@ export default () => {
               placeholder="Escolha um arquivo"
               accept="image/png, image/gif, image/jpeg"
               onChange={(e) => setModalFileField(e.target.files[0])}
-              name="file"
+              name="photo"
               disabled={modalLoading}
             />
           </CForm>

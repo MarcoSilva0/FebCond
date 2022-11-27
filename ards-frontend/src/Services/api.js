@@ -18,7 +18,10 @@ const request = async (method, endpoint, params, token = null) => {
       body = JSON.stringify(params)
       break
   }
-  let headers = { 'Content-Type': 'application/json' }
+  let headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  }
 
   if (token) {
     headers.Authorization = `Bearer ${token}`
@@ -143,6 +146,11 @@ export default () => {
     getUsers: async () => {
       let token = localStorage.getItem('token')
       let json = await request('get', '/users', {}, token)
+      return json
+    },
+    updateUser: async (id, data) => {
+      let token = localStorage.getItem('token')
+      let json = await request('update', `/user/${id}`, data, token)
       return json
     },
   }
