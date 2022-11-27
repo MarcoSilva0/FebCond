@@ -22,10 +22,15 @@ Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Nati
 - Ao instalar o Front-end rode no terminarl o seguinte comando dentro da pasta 'npm install' 
 
 ## Back-end
-- Para iniciar o servidor basta roda 'php artisan serve'
+- Composer install
+- Configurar o .env
 - Gere clone o .env e configure as credenciais do banco de dados
 - Para que o sistema funcione terá que gerar uma chave do JWT com 'php artisan jwt:secret' e add os seguintes items no .env
 -- JWT_SECRET=chave_secreta_que_voce_gerou
+- php artisan migrations
+- php artisan storage:link
+- Para iniciar o servidor basta roda 'php artisan serve'
+
 ## Front-end
 - Para iniciar o servidor basta roda 'npm start'
 - Para o dashboard foi utilziado a biblioteca CoreUI Admin no ReacJs, template adquirido no repositório: https://github.com/coreui/coreui-free-react-admin-template

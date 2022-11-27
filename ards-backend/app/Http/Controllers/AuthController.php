@@ -89,6 +89,18 @@ class AuthController extends Controller
                 'password' => $password
             ]);
 
+            //Verificação de nível de acesso:
+            //    0 = Desativa,
+            //    1 = Admin,
+            //    2 = Usuário proprietário,
+            //    3 = Usuário dependente
+            // if ($token) {
+            //     $currentUser = Auth::user();
+            //     if ($currentUser->admin > 0)) {
+            //         return "invalid_credential";
+            //     }
+            // }
+
             if(!$token){
                 $arr['error'] = 'E-mail e/ou Senha estão errados.';
                 return $arr;

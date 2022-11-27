@@ -18,8 +18,20 @@ class Createalltables extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('cpf')->unique();
-            $table->string('senha')->unique();
+            $table->string('photo');
+            $table->integer('permission');
+            $table->string('password');
         });
+
+        DB::table('users')->insert(
+            array(
+                'name' => 'Admin',
+                'email' => 'admin@admin.com',
+                'cpf' => '12345678910',
+                'admin' => 1,
+                'password' => password_hash('123456a', PASSWORD_DEFAULT)
+            )
+        );
 
         Schema::create('units', function(Blueprint $table){
             $table->id();
@@ -83,7 +95,7 @@ class Createalltables extends Migration
             $table->date('datecreated');
             $table->text('photos');
         });
-        
+
         Schema::create('foundandlost', function(Blueprint $table){
             $table->id();
             $table->string('status')->default('LOST'); //LOST, RECOVERED
