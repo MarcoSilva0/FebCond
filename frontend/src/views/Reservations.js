@@ -90,14 +90,17 @@ export default () => {
     {
       name: 'Unidade',
       selector: (row) => row.name_unit,
+      sortable: true,
     },
     {
       name: 'Área',
       selector: (row) => row.name_area,
+      sortable: true,
     },
     {
       name: 'Data da reserva',
       selector: (row) => row.reservation_date,
+      sortable: true,
     },
     {
       cell: (row) => (
