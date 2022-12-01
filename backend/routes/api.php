@@ -28,7 +28,7 @@ Route::middleware('auth:api')->group(function(){
 
     //Usuários
     Route::get('/users', [UserController::class, 'getUsers']);
-    Route::update('/user/{id}', [UserController::class, 'updateUser']);
+    Route::put('/user/{id}', [UserController::class, 'updateUser']);
 
     // Mural de avisos
     Route::get('/walls', [WallController::class, 'getAll']);

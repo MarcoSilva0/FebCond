@@ -183,7 +183,7 @@ export default () => {
           <h2>Usuários</h2>
           <CCard>
             <CCardHeader>
-              <CButton color="primary" className="btn-addApi" onClick={handleNewButton}>
+              <CButton color="primary" className="btn-add-api" onClick={handleNewButton}>
                 <CIcon icon={cilPlus} />
                 Novo Usuário
               </CButton>

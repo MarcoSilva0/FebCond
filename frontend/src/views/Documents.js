@@ -157,7 +157,7 @@ export default () => {
           <h2>Documentos</h2>
           <CCard>
             <CCardHeader>
-              <CButton color="primary" className="btn-addApi" onClick={handleNewButton}>
+              <CButton color="primary" className="btn-add-api" onClick={handleNewButton}>
                 <CIcon icon={cilPlus} />
                 Novo Documento
               </CButton>

@@ -147,7 +147,7 @@ export default () => {
           <h2>Reservas</h2>
           <CCard>
             <CCardHeader>
-              <CButton color="primary" className="btn-addApi" onClick={handleNewButton}>
+              <CButton color="primary" className="btn-add-api" onClick={handleNewButton}>
                 <CIcon icon={cilPlus} />
                 Nova Reserva
               </CButton>
