@@ -12,6 +12,17 @@ use App\Models\UnitPet;
 
 class UnitController extends Controller
 {
+    public function getUnits(){
+
+        $arr = ['error' => '', 'list' => []];
+
+        $unidades = Unit::all();
+
+        $arr['list'] = $unidades;
+
+        return $arr;
+    }
+
     public function getInfo($id){
         $arr = ['error' => ''];
 

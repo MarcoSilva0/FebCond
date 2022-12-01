@@ -12,6 +12,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WallController;
 use App\Http\Controllers\WarningController;
+use App\Http\Controllers\Area;
 
 Route::get('/ping', function(){
     return['pong'=>true];
@@ -57,6 +58,7 @@ Route::middleware('auth:api')->group(function(){
     Route::put('/foundandlost/{id}', [FoundAndLostController::class, 'update']);
 
     // Unidade
+    Route::get('/units', [UnitController::class, 'getUnits']);
     Route::get('/unit/{id}', [UnitController::class, 'getInfo']);
 
     Route::post('/unit/{id}/addperson', [UnitController::class, 'addPerson']);
@@ -77,4 +79,7 @@ Route::middleware('auth:api')->group(function(){
 
     Route::get('/myreservations', [ReservationController::class, 'getMyReservation']);
     Route::delete('/myreservation/{id}', [ReservationController::class, 'delMyReservation']);
+
+    //Areas
+    Route::get('/areas', [Area::class, 'getAreas']);
 });
