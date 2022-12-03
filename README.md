@@ -36,3 +36,10 @@ Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Nati
 ## Front-end
 - Para iniciar o servidor basta roda 'npm start'
 - Para o dashboard foi utilziado a biblioteca CoreUI Admin no ReacJs, template adquirido no repositório: https://github.com/coreui/coreui-free-react-admin-template
+
+
+## Mobile
+- Drawer
+- ContextAPI / Async Storage
+- Token - JWT
+- FontAwesome (Icones)
