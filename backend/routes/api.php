@@ -45,7 +45,8 @@ Route::middleware('auth:api')->group(function(){
     Route::delete('/doc/{id}', [DocController::class, 'deleteDoc']);
 
     // Livro de ocorrência
-    Route::get('/warnings', [WarningController::class, 'getMyWarnings']);
+    Route::get('/warnings', [WarningController::class, 'getWarnings']);
+    Route::get('/mywarnings', [WarningController::class, 'getMyWarnings']);
     Route::post('/warning', [WarningController::class, 'setWarning']);
     Route::post('/warning/file', [WarningController::class, 'addWarningFile']);
 

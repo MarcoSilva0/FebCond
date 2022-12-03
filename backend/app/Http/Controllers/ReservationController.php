@@ -92,7 +92,9 @@ class ReservationController extends Controller
             $arr['list'][] = [
                 'id' => $reserva['id'],
                 'name_unit' => $unidade['name'],
+                'id_unit' => $reserva['id_unit'],
                 'name_area' => $area['title'],
+                'id_area' => $reserva['id_area'],
                 'reservation_date' => $dataRes
             ];
         }

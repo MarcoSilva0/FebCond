@@ -126,6 +126,16 @@ export default () => {
       let json = await request('get', '/allreservations', {}, token)
       return json
     },
+    getUnits: async () => {
+      let token = localStorage.getItem('token')
+      let json = await request('get', '/units', {}, token)
+      return json
+    },
+    getAreas: async () => {
+      let token = localStorage.getItem('token')
+      let json = await request('get', '/areas', {}, token)
+      return json
+    },
     updateReservations: async (id, data) => {
       let token = localStorage.getItem('token')
       let json = await request('put', `/wall/${id}`, data, token)
@@ -139,6 +149,18 @@ export default () => {
     removeReservations: async (id) => {
       let token = localStorage.getItem('token')
       let json = await request('delete', `/wall/${id}`, {}, token)
+      return json
+    },
+
+    //Ocorrências
+    getWarnings: async () => {
+      let token = localStorage.getItem('token')
+      let json = await request('get', '/warnings', {}, token)
+      return json
+    },
+    updateWarning: async () => {
+      let token = localStorage.getItem('token')
+      let json = await request('post', '/warnings', {}, token)
       return json
     },
 

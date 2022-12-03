@@ -11,9 +11,43 @@ use App\Models\Unit;
 
 class WarningController extends Controller
 {
+    public function getWarnings(){
+
+        $arr = ['error' => '', 'list' => []];
+
+        $ocorrencias = Warning::all();
+
+        foreach($ocorrencias as $ocorrencia){
+
+            $unidade = Unit::find($ocorrencia['id_unit']);
+            $dataOco = date('d/m/Y', strtotime($ocorrencia['datecreated']));
+
+            $photos = explode(',', $ocorrencia['photos']);
+
+            foreach($photos as $photo){
+                if(!empty($photo)){
+                    $photList[] = asset('storage/'.$photo);
+                }
+            }
+
+            $arr['list'][] = [
+                'id' => $ocorrencia['id'],
+                'id_unit' => $ocorrencia['id_unit'],
+                'title' => $ocorrencia['title'],
+                'status' => $ocorrencia['status'],
+                'datecreated' => $ocorrencia['datecreated'],
+                'photos' => $photList,
+                'name_unit' => $unidade['name'],
+                'datecreated_formatted' => $dataOco
+            ];
+        }
+
+        return $arr;
+    }
+
     public function getMyWarnings(Request $resquest){
-        $arr = ['error' => ''];  
-        
+        $arr = ['error' => ''];
+
         $property = $resquest->input('property');
 
         if($property){
@@ -43,7 +77,7 @@ class WarningController extends Controller
                     }
 
                     $warnings[$warnKey]['photos'] = $photList;
-                    
+
                 }
 
                 $arr['list'] = $warnings;

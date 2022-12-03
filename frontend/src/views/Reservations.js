@@ -13,6 +13,7 @@ import {
   CModalFooter,
   CForm,
   CFormInput,
+  CFormSelect,
   CFormTextarea,
 } from '@coreui/react'
 import DataTable from 'react-data-table-component'
@@ -28,9 +29,12 @@ export default () => {
   const [list, setList] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [modalLoading, setModalLoading] = useState(false)
-  const [modalTitleField, setModalTitleField] = useState('')
-  const [modalBodyField, setModalBodyField] = useState('')
   const [modalId, setModalId] = useState('')
+  const [modalUnitList, setModalUnitList] = useState([])
+  const [modalAreaList, setModalAreaList] = useState([])
+  const [modalUnitId, setModalUnitId] = useState(0)
+  const [modalAreaId, setModalAreaId] = useState(0)
+  const [modalDateField, setModalDateField] = useState('')
 
   const handelCloseModal = () => {
     setShowModal(false)
@@ -38,15 +42,17 @@ export default () => {
 
   const handleEditButton = (index) => {
     setModalId(index.id)
-    setModalTitleField(index.title)
-    setModalBodyField(index.body)
+    setModalUnitId(index.id_unit)
+    setModalAreaId(index.id_area)
+    setModalDateField(index.reservation_date)
     setShowModal(true)
   }
 
   const handleNewButton = () => {
-    setModalId()
-    setModalTitleField()
-    setModalBodyField()
+    setModalId('')
+    setModalUnitId('')
+    setModalAreaId('')
+    setModalDateField('')
     setShowModal(true)
   }
 
@@ -62,13 +68,10 @@ export default () => {
   }
 
   const handelSaveModal = async () => {
-    if (modalTitleField && modalBodyField) {
+    if (true) {
       setModalLoading(true)
       let result
-      let data = {
-        title: modalTitleField,
-        body: modalBodyField,
-      }
+      let data = {}
       if (!modalId) {
         result = await api.addReservations(data)
       } else {
@@ -91,23 +94,41 @@ export default () => {
       name: 'Unidade',
       selector: (row) => row.name_unit,
       sortable: true,
+      compact: true,
+    },
+    {
+      name: 'Id Unidade',
+      selector: (row) => row.id_unit,
+      omit: true,
     },
     {
       name: 'Área',
       selector: (row) => row.name_area,
       sortable: true,
+      compact: true,
+    },
+    {
+      name: 'Id Area',
+      selector: (row) => row.id_area,
+      omit: true,
     },
     {
       name: 'Data da reserva',
       selector: (row) => row.reservation_date,
       sortable: true,
+      compact: true,
     },
     {
       cell: (row) => (
         // eslint-disable-next-line react/jsx-no-undef
         <CRow className="justify-content-around w-100">
           <CCol className="text-center">
-            <CButton color="info" className="text-white" onClick={() => handleEditButton(row)}>
+            <CButton
+              color="info"
+              className="text-white"
+              onClick={() => handleEditButton(row)}
+              disabled={modalUnitList.length === 0 || modalAreaList.length === 0}
+            >
               <CIcon icon={cilPenAlt} /> Editar
             </CButton>
           </CCol>
@@ -126,6 +147,8 @@ export default () => {
 
   useEffect(() => {
     getList()
+    getUnitList()
+    getAreas()
   }, [])
 
   const getList = async () => {
@@ -140,6 +163,20 @@ export default () => {
     }
   }
 
+  const getUnitList = async () => {
+    const result = await api.getUnits()
+    if (result.error === '') {
+      setModalUnitList(result.list)
+    }
+  }
+
+  const getAreas = async () => {
+    const result = await api.getAreas()
+    if (result.error === '') {
+      setModalAreaList(result.list)
+    }
+  }
+
   return (
     <>
       <CRow>
@@ -147,7 +184,12 @@ export default () => {
           <h2>Reservas</h2>
           <CCard>
             <CCardHeader>
-              <CButton color="primary" className="btn-add-api" onClick={handleNewButton}>
+              <CButton
+                color="primary"
+                className="btn-add-api"
+                onClick={handleNewButton}
+                disabled={modalUnitList.length === 0 || modalAreaList.length === 0}
+              >
                 <CIcon icon={cilPlus} />
                 Nova Reserva
               </CButton>
@@ -160,29 +202,48 @@ export default () => {
       </CRow>
 
       <CModal visible={showModal} onClose={handelCloseModal}>
-        <CModalHeader closeButton>{!modalId ? 'Novo' : 'Editar'} Aviso</CModalHeader>
+        <CModalHeader closeButton>{!modalId ? 'Nova' : 'Editar'} Reserva</CModalHeader>
         <CModalBody>
           <CFormInput type="hidden" id="modal-id" value={modalId} />
           <CForm>
+            <CFormSelect
+              id="modal-unidade"
+              aria-label="Default select example"
+              label="Unidade"
+              custom
+              onChange={(e) => setModalUnitId(e.target.value)}
+            >
+              <option>Unidade</option>
+              {modalUnitList.map((item, index) => (
+                <option key={index} value={item.id} selected={item.id === modalUnitId}>
+                  {item.name}
+                </option>
+              ))}
+            </CFormSelect>
+            <br></br>
+            <CFormSelect
+              id="modal-area"
+              aria-label="Default select example"
+              label="Area"
+              custom
+              onChange={(e) => setModalAreaId(e.target.value)}
+            >
+              <option>Área</option>
+              {modalAreaList.map((item, index) => (
+                <option key={index} value={item.id} selected={item.id === modalAreaId}>
+                  {item.title}
+                </option>
+              ))}
+            </CFormSelect>
+            <br></br>
             <CFormInput
               type="text"
-              id="modal-title"
-              placeholder="Digite um título"
-              label="Título do Aviso"
-              value={modalTitleField}
-              onChange={(e) => setModalTitleField(e.target.value)}
+              id="modal-date"
+              label="Data da reserva"
+              value={modalDateField}
+              onChange={(e) => setModalDateField(e.target.value)}
               disabled={modalLoading}
             />
-            <br></br>
-            <CFormTextarea
-              id="modal-body"
-              placeholder="Digite o conteúdo do aviso"
-              label="Conteúdo do Aviso"
-              value={modalBodyField}
-              rows="5"
-              onChange={(e) => setModalBodyField(e.target.value)}
-              disabled={modalLoading}
-            ></CFormTextarea>
           </CForm>
         </CModalBody>
         <CModalFooter>

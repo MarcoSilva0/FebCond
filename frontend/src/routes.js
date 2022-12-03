@@ -6,6 +6,7 @@ const Wall = React.lazy(() => import('./views/Wall'))
 const Documents = React.lazy(() => import('./views/Documents'))
 const Reservations = React.lazy(() => import('./views/Reservations'))
 const Users = React.lazy(() => import('./views/Users'))
+const Warnings = React.lazy(() => import('./views/Warnings'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -14,6 +15,7 @@ const routes = [
   { path: '/avisos', name: 'Avisos', element: Wall },
   { path: '/documentos', name: 'Documentos', element: Documents },
   { path: '/reservas', name: 'Reservas', element: Reservations },
+  { path: '/ocorrencias', name: 'Ocorrências', element: Warnings },
   { path: '/usuarios', name: 'Usuários', element: Users },
 ]
 
