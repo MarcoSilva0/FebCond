@@ -31,19 +31,19 @@ Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Nati
 1. Duplique o arquivo .env.example e renomeie para .env
 2. Configure-o com nome do APP, URL que será executado e os dados do banco de dados
 3. Dentro da pasta execute no terminal os seguinte comandos
-3.1`composer install`
-3.2`php artisan jwt:secret`
-3.3`php artisan migrations`
-3.4`php artisan storage:link`
-3.5`php artisan serve`
+    3.1 `composer install`
+    3.2 `php artisan jwt:secret`
+    3.3 `php artisan migrations`
+    3.4 `php artisan storage:link`
+    3.5 `php artisan serve`
 > O último comando iniciará o servidor backend e terá como usuário padrão o admin@admin.com:123456a
 
 
 ### Front-end
 1. Você pode configura qual a porta o sistema irá rodar dentro do arquivo .env, recomendamos que seja na porta 80
 2. Dentro da pasta frontend execute no terminal os seguintes comandos
-2.1 `npm install`
-2.2 `npm start`
+    2.1 `npm install`
+    2.2 `npm start`
 
 ## Mobile
 - Drawer
