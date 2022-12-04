@@ -170,9 +170,53 @@ export default () => {
       let json = await request('get', '/users', {}, token)
       return json
     },
+    addUsers: async (data) => {
+      let token = localStorage.getItem('token')
+      let formData = new FormData()
+      formData.append('name', data.name)
+      formData.append('email', data.email)
+      formData.append('cpf', data.cpf)
+      formData.append('permission', data.permission)
+      formData.append('password', data.password)
+      formData.append('password_confirm', data.password_confirm)
+      if (data.photo) {
+        formData.append('photo', data.photo)
+      }
+      let req = await fetch(`${baseUrl}/users`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      })
+      let json = await req.json()
+      return json
+    },
     updateUser: async (id, data) => {
       let token = localStorage.getItem('token')
-      let json = await request('update', `/user/${id}`, data, token)
+      let formData = new FormData()
+      formData.append('name', data.name)
+      formData.append('email', data.email)
+      formData.append('cpf', data.cpf)
+      formData.append('permission', data.permission)
+      formData.append('password', data.password)
+      formData.append('password_confirm', data.password_confirm)
+      if (data.photo) {
+        formData.append('photo', data.photo)
+      }
+      let req = await fetch(`${baseUrl}/user/${id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      })
+      let json = await req.json()
+      return json
+    },
+    deleteUser: async (id) => {
+      let token = localStorage.getItem('token')
+      let json = await request('delete', `/user/${id}`, {}, token)
       return json
     },
   }

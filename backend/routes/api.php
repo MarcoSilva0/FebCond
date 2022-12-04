@@ -29,7 +29,9 @@ Route::middleware('auth:api')->group(function(){
 
     //Usuários
     Route::get('/users', [UserController::class, 'getUsers']);
-    Route::put('/user/{id}', [UserController::class, 'updateUser']);
+    Route::post('/users', [UserController::class, 'addUser']);
+    Route::post('/user/{id}', [UserController::class, 'updateUser']);
+    Route::delete('/user/{id}', [UserController::class, 'deleteUser']);
 
     // Mural de avisos
     Route::get('/walls', [WallController::class, 'getAll']);

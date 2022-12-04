@@ -13,6 +13,7 @@ import {
   CModalFooter,
   CForm,
   CFormInput,
+  CFormSelect,
 } from '@coreui/react'
 import DataTable from 'react-data-table-component'
 import CIcon from '@coreui/icons-react'
@@ -31,7 +32,9 @@ export default () => {
   const [modalNameField, setModalNameField] = useState('')
   const [modalEmailField, setModalEmailField] = useState('')
   const [modalCpfField, setModalCpfField] = useState('')
+  const [modalSenhaField, setModalSenhaField] = useState('')
   const [modalFileField, setModalFileField] = useState('')
+  const [modalUserPermission, setModalUserPermission] = useState(0)
   const [modalId, setModalId] = useState('')
 
   const handelCloseModal = () => {
@@ -43,7 +46,8 @@ export default () => {
     setModalNameField(index.name)
     setModalEmailField(index.email)
     setModalCpfField(index.cpf)
-    setModalFileField(index.file)
+    setModalFileField(index.photo)
+    setModalUserPermission(index.permission)
     setShowModal(true)
   }
 
@@ -52,16 +56,18 @@ export default () => {
     setModalNameField()
     setModalEmailField()
     setModalCpfField()
+    setModalUserPermission()
+    setModalSenhaField()
     setShowModal(true)
   }
 
   const handleDownloadButton = (index) => {
-    window.open(index.fileurl)
+    window.open(index.photo)
   }
 
   const handleRemoveButton = async (index) => {
     if (window.confirm('Tem certeza que deseja excluir?')) {
-      const result = await api.removeDocuments(index.id)
+      const result = await api.deleteUser(index.id)
       if (result.error === '') {
         getList()
       } else {
@@ -71,18 +77,21 @@ export default () => {
   }
 
   const handelSaveModal = async () => {
-    if (modalNameField) {
+    if (modalNameField !== '' && modalEmailField !== '' && modalCpfField !== '') {
       setModalLoading(true)
       let result
       let data = {
-        name: modalNameField(),
-        email: modalEmailField(),
-        cpf: modalCpfField(),
+        name: modalNameField,
+        email: modalEmailField,
+        cpf: modalCpfField,
+        permission: modalUserPermission,
+        password: modalSenhaField,
+        password_confirm: modalSenhaField,
       }
       if (!modalId) {
         if (modalFileField) {
-          data.file = modalFileField
-          result = await api.addDocuments(data)
+          data.photo = modalFileField
+          result = await api.addUsers(data)
         } else {
           alert('Selecione o arquivo!')
           setModalLoading(false)
@@ -90,9 +99,9 @@ export default () => {
         }
       } else {
         if (modalFileField) {
-          data.file = modalFileField
+          data.photo = modalFileField
         }
-        result = await api.updateDocuments(modalId, data)
+        result = await api.updateUser(modalId, data)
       }
       setModalLoading(false)
       if (result.error === '') {
@@ -121,7 +130,7 @@ export default () => {
     },
     {
       name: 'CPF',
-      selector: (row) => row.cpf,
+      selector: (row) => cpfMask(row.cpf),
     },
     {
       name: 'Permissão',
@@ -136,6 +145,7 @@ export default () => {
             <CButton
               color="success"
               className="text-white"
+              disabled={row.photo !== '' ? false : true}
               onClick={() => handleDownloadButton(row)}
             >
               <CIcon icon={cilCloudDownload} />
@@ -204,7 +214,7 @@ export default () => {
               type="text"
               id="modal-name"
               placeholder="Nome do usuário"
-              label="Nome"
+              label="Nome*"
               value={modalNameField}
               onChange={(e) => setModalNameField(e.target.value)}
               disabled={modalLoading}
@@ -213,8 +223,8 @@ export default () => {
             <CFormInput
               type="email"
               id="modal-email"
-              placeholder="Nome do usuário"
-              label="Nome"
+              placeholder="E-mail do usuário"
+              label="E-mail*"
               value={modalEmailField}
               onChange={(e) => setModalEmailField(e.target.value)}
               disabled={modalLoading}
@@ -222,22 +232,44 @@ export default () => {
             <br></br>
             <CFormInput
               type="text"
-              id="modal-title"
+              id="modal-cpf"
               placeholder="Digite o CPF"
-              label="CPF:"
+              label="CPF*"
               value={modalCpfField}
               onChange={handlechangeCpf}
               disabled={modalLoading}
             />
             <br></br>
+            <CFormSelect
+              id="modal-permission"
+              aria-label="Default select example"
+              label="Permissão"
+              onChange={(e) => setModalUserPermission(e.target.value)}
+              defaultChecked={modalUserPermission ? modalUserPermission : ''}
+            >
+              <option>---</option>
+              <option value={1}>Administrador</option>
+              <option value={2}>Usuário</option>
+            </CFormSelect>
+            <br></br>
             <CFormInput
               type="file"
-              id="modal-file"
+              id="modal-photo"
               label="Foto do usuário"
               placeholder="Escolha um arquivo"
               accept="image/png, image/gif, image/jpeg"
               onChange={(e) => setModalFileField(e.target.files[0])}
+              required={false}
               name="photo"
+              disabled={modalLoading}
+            />
+            <br></br>
+            <CFormInput
+              type="password"
+              id="modal-password"
+              placeholder="Digite uma senha"
+              label="Senha"
+              onChange={(e) => setModalSenhaField(e.target.value)}
               disabled={modalLoading}
             />
           </CForm>
