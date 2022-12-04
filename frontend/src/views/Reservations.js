@@ -14,7 +14,6 @@ import {
   CForm,
   CFormInput,
   CFormSelect,
-  CFormTextarea,
 } from '@coreui/react'
 import DataTable from 'react-data-table-component'
 import CIcon from '@coreui/icons-react'

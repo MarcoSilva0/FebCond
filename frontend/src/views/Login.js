@@ -26,6 +26,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
 
   const handleLoginButton = async () => {
+    setLoading(true)
     if (email && password) {
       const result = await api.login(email, password)
       setLoading(false)
@@ -80,6 +81,7 @@ const Login = () => {
                       <CCol>
                         <CButton
                           color="primary"
+                          type="submit"
                           className="px-4 w-100"
                           disabled={loading}
                           onClick={handleLoginButton}
