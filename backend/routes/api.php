@@ -29,6 +29,7 @@ Route::middleware('auth:api')->group(function(){
 
     //Usuários
     Route::get('/users', [UserController::class, 'getUsers']);
+    Route::get('/users/search', [UserController::class, 'searchUsers']);
     Route::post('/users', [UserController::class, 'addUser']);
     Route::post('/user/{id}', [UserController::class, 'updateUser']);
     Route::delete('/user/{id}', [UserController::class, 'deleteUser']);
