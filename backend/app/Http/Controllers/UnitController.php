@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\Unit;
+use App\Models\User;
 use App\Models\UnitPeople;
 use App\Models\UnitVehicle;
 use App\Models\UnitPet;
@@ -17,6 +18,21 @@ class UnitController extends Controller
         $arr = ['error' => '', 'list' => []];
 
         $unidades = Unit::all();
+
+        foreach($unidades as $unidadesKey => $unidadesValue){
+            $unidades[$unidadesKey]['id'] = $unidadesValue['id'];
+            $unidades[$unidadesKey]['name'] = $unidadesValue['name'];
+            $unidades[$unidadesKey]['id_owner'] = $unidadesValue['id_owner'];
+
+            $user = User::find($unidadesValue['id_owner']);
+            if($user){
+                $unidades[$unidadesKey]['name_owner'] = $user->name;
+            }else{
+                $unidades[$unidadesKey]['name_owner'] = '-';
+            }
+
+
+        }
 
         $arr['list'] = $unidades;
 

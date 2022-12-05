@@ -85,4 +85,8 @@ Route::middleware('auth:api')->group(function(){
 
     //Areas
     Route::get('/areas', [Area::class, 'getAreas']);
+    Route::post('/areas', [Area::class, 'addArea']);
+    Route::post('/area/{id}', [Area::class, 'updateArea']);
+    Route::put('/area/{id}/allowed', [Area::class, 'updateAreaAllowed']);
+    Route::delete('/area/{id}', [Area::class, 'deleteArea']);
 });
