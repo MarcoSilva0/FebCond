@@ -31,7 +31,7 @@ const AppHeaderDropdown = () => {
         <CAvatar src={avatar10} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
+        {/* <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
         <CDropdownItem href="#">
           <CIcon icon={cilBell} className="me-2" />
           Updates
@@ -83,10 +83,10 @@ const AppHeaderDropdown = () => {
             42
           </CBadge>
         </CDropdownItem>
-        <CDropdownDivider />
-        <CDropdownItem href="#">
+        <CDropdownDivider /> */}
+        <CDropdownItem href="/logout" className="pt-2">
           <CIcon icon={cilLockLocked} className="me-2" />
-          Lock Account
+          Sair
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

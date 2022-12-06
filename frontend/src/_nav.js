@@ -10,7 +10,6 @@ import {
   cilPeople,
   cilPool,
   cilSpeedometer,
-  cilUser,
   cilWarning,
 } from '@coreui/icons'
 import { CNavItem, CNavTitle } from '@coreui/react'
@@ -82,12 +81,12 @@ const _nav = [
     component: CNavTitle,
     name: 'Configurações',
   },
-  {
-    component: CNavItem,
-    name: 'Meu Perfil',
-    to: '/perfil',
-    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Meu Perfil',
+  //   to: '/perfil',
+  //   icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  // },
   {
     component: CNavItem,
     name: 'Sair',

@@ -39,6 +39,86 @@ class UnitController extends Controller
         return $arr;
     }
 
+    public function addUnits(Request $request){
+        $arr = ['error' => '', 'list' => []];
+
+        $validator = Validator::make($request->all(),[
+            'name'              => 'required',
+            'id_owner'             => 'required'
+        ]);
+
+        if(!$validator->fails()){
+
+            $name = $request->input('name');
+            $id_owner = $request->input('id_owner');
+
+            $newUnit = new Unit();
+            $newUnit->name = $name;
+            $newUnit->id_owner = $id_owner;
+            $newUnit->save();
+
+        }else{
+            $arr['error'] = $validator->errors()->first();
+
+            return $arr;
+        }
+
+        return $arr;
+    }
+
+    public function updateUnits($id, Request $request){
+        $arr = ['error' => ''];
+
+        $validator = Validator::make($request->all(),[
+            'name'             => 'required',
+            'id_owner'         => 'required'
+        ]);
+
+        if(!$validator->fails()){
+
+            $name = $request->input('name');
+            $id_owner = $request->input('id_owner');
+
+            $item = Unit::find($id);
+
+            if($item){
+
+                $item->name = $name;
+                $item->id_owner = $id_owner;
+                $item->save();
+
+            }else{
+                $arr['error'] = 'Unidade inexistente';
+                return $arr;
+            }
+
+        }else{
+            $arr['error'] = $validator->errors()->first();
+
+            return $arr;
+        }
+
+        return $arr;
+    }
+
+    public function deleteUnit($id){
+        $arr = ['error'=>''];
+
+        $user = auth()->user();
+        $unidade = Unit::find($id);
+
+        if($unidade){
+
+            Unit::find($id)->delete();
+
+        }else{
+            $arr['error'] = 'Unidade inexistente';
+            return $arr;
+        }
+
+        return $arr;
+    }
+
     public function getInfo($id){
         $arr = ['error' => ''];
 

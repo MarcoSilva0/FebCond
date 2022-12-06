@@ -14,6 +14,7 @@ import {
   CForm,
   CFormInput,
   CFormSelect,
+  CFormLabel,
 } from '@coreui/react'
 import DataTable from 'react-data-table-component'
 import CIcon from '@coreui/icons-react'
@@ -40,18 +41,34 @@ export default () => {
   }
 
   const handleEditButton = (index) => {
+    console.log(index.name)
     setModalId(index.id)
+    setModalNameField(index.name)
+    setModalOwnerSearchList([])
+    setModalOwnerSearchField('')
+    if (index.name_owner) {
+      setModalOwnerField({
+        name: index.name_owner,
+        id: index.id,
+      })
+    } else {
+      setModalOwnerField(null)
+    }
     setShowModal(true)
   }
 
   const handleNewButton = () => {
     setModalId()
+    setModalNameField('')
+    setModalOwnerField(null)
+    setModalOwnerSearchList([])
+    setModalOwnerSearchField('')
     setShowModal(true)
   }
 
   const handleRemoveButton = async (index) => {
     if (window.confirm('Tem certeza que deseja excluir?')) {
-      const result = await api.removeWall(index.id)
+      const result = await api.removeUnit(index.id)
       if (result.error === '') {
         getList()
       } else {
@@ -66,11 +83,12 @@ export default () => {
       let result
       let data = {
         name: modalNameField,
+        id_owner: modalOwnerField.id,
       }
       if (!modalId) {
-        result = await api.addWall(data)
+        result = await api.addUnits(data)
       } else {
-        result = await api.updateWall(modalId, data)
+        result = await api.updateUnits(modalId, data)
       }
       setModalLoading(false)
       if (result.error === '') {
@@ -138,7 +156,9 @@ export default () => {
   }
 
   const selectModalOwnerField = (id) => {
-    let item = modalOwnerSearchList.find((item) => item.id === id)
+    // eslint-disable-next-line prettier/prettier
+    // eslint-disable-next-line
+    let item = modalOwnerSearchList.find(modalOwnerSearchList => modalOwnerSearchList.id == id)
     setModalOwnerField(item)
     setModalOwnerSearchList([])
     setModalOwnerSearchField('')
@@ -188,31 +208,36 @@ export default () => {
               onChange={(e) => setModalNameField(e.target.value)}
             />
             <br></br>
-            <CFormInput
-              type="text"
-              id="modal-owner"
-              label="Proprietário (nome, cpf ou e-mail)"
-              value={modalOwnerSearchField}
-              onChange={(e) => setModalOwnerSearchField(e.target.value)}
-            />
-            <br></br>
-            {modalOwnerSearchList.length > 0 && (
-              <CFormSelect htmlSize={5} onChange={(e) => selectModalOwnerField(e.target.value)}>
-                {modalOwnerSearchList.map((item, index) => (
-                  <option key={index} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </CFormSelect>
+            <CFormLabel htmlFor="modal-owner">Proprietário (nome, cpf ou e-mail)</CFormLabel>
+            {modalOwnerField === null && (
+              <>
+                <CFormInput
+                  type="text"
+                  id="modal-owner"
+                  value={modalOwnerSearchField}
+                  onChange={(e) => setModalOwnerSearchField(e.target.value)}
+                />
+                <br></br>
+                {modalOwnerSearchList.length > 0 && (
+                  <CFormSelect htmlSize={5} onChange={(e) => selectModalOwnerField(e.target.value)}>
+                    {modalOwnerSearchList.map((item, index) => (
+                      <option key={index} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                )}
+              </>
             )}
             {modalOwnerField !== null && (
-              <>
-                <br />
-                <CButton size="sm" color="danger">
-                  X
-                </CButton>
-                {modalOwnerField.name}
-              </>
+              <CRow>
+                <CCol>
+                  <CButton size="sm" color="danger" onClick={() => setModalOwnerField(null)}>
+                    X
+                  </CButton>
+                  {modalOwnerField.name}
+                </CCol>
+              </CRow>
             )}
           </CForm>
         </CModalBody>

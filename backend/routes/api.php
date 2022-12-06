@@ -64,6 +64,9 @@ Route::middleware('auth:api')->group(function(){
     // Unidade
     Route::get('/units', [UnitController::class, 'getUnits']);
     Route::get('/unit/{id}', [UnitController::class, 'getInfo']);
+    Route::post('/units', [UnitController::class, 'addUnits']);
+    Route::put('/unit/{id}', [UnitController::class, 'updateUnits']);
+    Route::delete('/unit/{id}', [UnitController::class, 'deleteUnit']);
 
     Route::post('/unit/{id}/addperson', [UnitController::class, 'addPerson']);
     Route::post('/unit/{id}/addvehicle', [UnitController::class, 'addVehicle']);
