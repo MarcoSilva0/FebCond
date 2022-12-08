@@ -3,7 +3,7 @@
 Sistema de gestão de Condomínio, desenvolvido em Laravel, ReactJS e React Native
 ## Funcionalidades
 
-[] cadastro de Usuários
+[ ] cadastro de Usuários
 - Cadastro de Unidades( apartamentos, bloco ou casas)
 - Cadastro de Ativos da Unidade (Moradores, Veículos, Pets)
 - Mural de avisos
